@@ -5,7 +5,8 @@ import { galleryItems } from "./gallery-items.js";
 
 const galleryContainer = document.querySelector(".gallery");
 const createGalleryEl = createGallery(galleryItems);
-galleryContainer.innerHTML = createGalleryEl;
+
+galleryContainer.insertAdjacentHTML("beforeend", createGalleryEl);
 
 function createGallery(items) {
 	return items
@@ -35,13 +36,22 @@ function onModalClick(event) {
 
 	const instance = basicLightbox.create(
 		`<img
-	        src="${urlLargeImage}" width="800" height="600"/>`
+	        src="${urlLargeImage}" width="800" height="600"/>`,
+		{
+			onClose: () => {
+				window.removeEventListener("keydown", onEscPress);
+			},
+		}
 	);
 	instance.show();
-
-	window.addEventListener("keydown", (event) => {
+	function onEscPress(event) {
 		if (event.code === "Escape") {
 			instance.close();
+			window.removeEventListener("keydown", onEscPress);
 		}
-	});
+	}
+	if (instance.visible()) {
+		window.addEventListener("keydown", onEscPress);
+	}
+	console.log(event.target);
 }
