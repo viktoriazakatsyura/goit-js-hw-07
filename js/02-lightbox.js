@@ -6,12 +6,16 @@ import { galleryItems } from "./gallery-items.js";
 const galleryContainer = document.querySelector(".gallery");
 const createGalleryEl = createGallery(galleryItems);
 galleryContainer.insertAdjacentHTML("beforeend", createGalleryEl);
+let gallery = new SimpleLightbox(".gallery a", {
+  captionsData: "alt",
+  captionDelay: 250,
+});
 
 function createGallery(items) {
-	return items
-		.map(
-			({ preview, original, description }) =>
-				`<a class="gallery__link" href="${original}">
+  return items
+    .map(
+      ({ preview, original, description }) =>
+        `<a class="gallery__link" href="${original}">
     <img
       class="gallery__image"
       src="${preview}"
@@ -19,18 +23,14 @@ function createGallery(items) {
       alt="${description}"
     />
   </a>`
-		)
-		.join("");
+    )
+    .join("");
 }
 
 galleryContainer.addEventListener("click", (event) => {
-	event.preventDefault();
+  event.preventDefault();
 
-	let gallery = new SimpleLightbox(".gallery a", {
-		captionsData: "alt",
-		captionDelay: 250,
-	});
-	gallery.on("show.simplelightbox", function () {
-		console.log(gallery);
-	});
+  gallery.on("show.simplelightbox", function () {
+    console.log(gallery);
+  });
 });
